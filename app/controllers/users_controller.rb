@@ -9,7 +9,21 @@ class UsersController < ApplicationController
   end
 
   def add_cookie
-    redirect_to("/", {:notice => "Signed in successfully." })
+    the_username = params.fetch(:input_username)
+    
+    the_user = User.where({ :username => the_username }).at(0)
+    
+    the_supplied_password = params.fetch(:input_password)
+
+    they_are_real = the_user.authenticate(the_supplied_password)
+
+    if they_are_real == false
+      redirect_to("/sign_in", { :alert => "Something went wrong.  Please try again." })
+    else
+      session[:user_id] = the_user.id
+
+      redirect_to("/", { :notice => "Signed in successfully." })
+    end    
   end
 
   def remove_cookie
