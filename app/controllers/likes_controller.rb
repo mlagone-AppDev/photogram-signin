@@ -1,4 +1,13 @@
 class LikesController < ApplicationController
+  before_action(:load_current_user) #will run this action for everything defined herein 
+  #before_action(:load_current_user, { :only => [:index, :show] }) #can run for only those specified
+  #before_action(:load_current_user, { :except => [:create, :delete] }) #can run for everything except specified
+
+
+  def load_current_user
+    @current_user = User.where({ :id => session[:user_id] }).at(0)
+  end
+  
   def index
     likes = Like.all.order({ :created_at => :asc })
 
@@ -15,7 +24,7 @@ class LikesController < ApplicationController
   def create
     like = Like.new
     like.fan_id = params.fetch(:input_fan_id, nil)
-    like.photo_id = params.fetch(:input_photo_id, nil)
+    like.photo_id = session[:user_id]
     like.save
 
     respond_to do |format|

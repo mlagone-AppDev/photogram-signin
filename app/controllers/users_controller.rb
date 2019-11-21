@@ -15,15 +15,19 @@ class UsersController < ApplicationController
     
     the_supplied_password = params.fetch(:input_password)
 
-    they_are_real = the_user.authenticate(the_supplied_password)
+    if the_user != nil
+      they_are_real = the_user.authenticate(the_supplied_password)
 
-    if they_are_real == false
-      redirect_to("/sign_in", { :alert => "Something went wrong.  Please try again." })
+      if they_are_real == false
+        redirect_to("/sign_in", { :alert => "Password incorrect." })
+      else
+        session[:user_id] = the_user.id
+
+        redirect_to("/", { :notice => "Signed in successfully." })
+      end    
     else
-      session[:user_id] = the_user.id
-
-      redirect_to("/", { :notice => "Signed in successfully." })
-    end    
+      redirect_to("/sign_in", { :alert => "No user with that username." })
+    end
   end
 
   def remove_cookie
