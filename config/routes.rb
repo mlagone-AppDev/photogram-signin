@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
+
+  match("/sign_up", {:controller => "users", :action => "registration_form", :via => "get" })
+
+  match("/sign_in", {:controller => "users", :action => "session_form", :via => "get" })
+
+  match("/verify_credentials", {:controller => "users", :action => "add_cookie", :via => "post" })
+
+  match("/sign_out", {:controller => "users", :action => "remove_cookie", :via => "get" })
+
   match("/", { :controller => "users", :action => "index", :via => "get" })
 
   # User routes

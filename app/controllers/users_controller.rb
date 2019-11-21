@@ -1,4 +1,22 @@
 class UsersController < ApplicationController
+ 
+  def registration_form
+    render("users/sign_up_form.html.erb")
+  end
+
+  def session_form
+    render("users/sign_in_form.html.erb")
+  end
+
+  def add_cookie
+    redirect_to("/", {:notice => "Signed in successfully." })
+  end
+
+  def remove_cookie
+    reset_session
+    redirect_to("/", {:notice => "Signed out successfully." })
+  end
+
   def index
     @users = User.all.order({ :username => :asc })
 
@@ -36,16 +54,26 @@ class UsersController < ApplicationController
     user.likes_count = params.fetch(:input_likes_count, 0)
     user.comments_count = params.fetch(:input_comments_count, 0)
 
-    user.save
+    user.password = params.fetch(:input_password)
+    user.password_confirmation = params.fetch(:input_password_confirm)
 
-    respond_to do |format|
-      format.json do
-        render({ :json => @user.as_json })
-      end
+    save_status = user.save
 
-      format.html do
-        redirect_to("/users/#{user.username}")
+    if save_status == true
+
+      session[:user_id] = user.id
+
+      respond_to do |format|
+        format.json do
+          render({ :json => @user.as_json })
+        end
+
+        format.html do
+          redirect_to("/users/#{user.username}")
+        end
       end
+    else
+      redirect_to("/sign_up", { :alert => "Something went wrong.  Please try again." })
     end
   end
 

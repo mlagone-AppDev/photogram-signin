@@ -32,7 +32,36 @@
           All Photos
         </a>
       </div>
+
+      <div>
+        <p>User ID: <%= session[:user_id] %></p>
+      </div>
+
+      <div>
+        <a href="/sign_up">
+          <i class="fas fa-users"></i>
+
+          Sign up
+        </a>
+      </div>
+
+      <div>
+        <a href="/sign_out">
+          <i class="fas fa-users"></i>
+
+          Sign out
+        </a>
+      </div>      
     </nav>
+
+    <% if alert.present? %>
+      <p style="border: thin red solid;"><%= alert %></p>
+    <% end %>
+
+    <% if notice.present? %>
+      <p style="border: thin green solid;"><%= notice %></p>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>
