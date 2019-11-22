@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
- 
+  skip_before_action(:force_sign_in, { :only => [:registration_form, :create, :session_form, :add_cookie ]})
+
   def registration_form
     render("users/sign_up_form.html.erb")
   end

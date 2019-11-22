@@ -28,33 +28,42 @@
 
   <dt>Add a fan</dt>
   <dd>
-    <form action="/insert_like_record" method="post">
-      <label for="browser_pic_id">Photo ID</label>
-      <input id="browser_pic_id" type="text" value="<%= @photo.id %>" name="input_photo_id">
+    <% like = Like.where({ :fan_id => @current_user.id, :photo_id => @photo.id }).at(0) %>
 
-      <button>Add fan</button>
-    </form>
+    <% if like != nil %>
+      <a href="/delete_like/<%= like.id %>">
+        Unlike
+      </a>
+    <% else %>
+      <form action="/insert_like_record" method="post">
+        <input type="hidden" value="<%= @photo.id %>" name="input_photo_id">
+
+        <button>Like</button>
+      </form>
+    <% end %>
   </dd>
 
-  <dt>Edit photo</dt>
-  <dd>
-    <form action="/update_photo/<%= @photo.id %>" method="post">
-      <label for="browser_image">Image</label>
-      <input id="browser_image" type="text" name="input_image" placeholder="Enter a URL for the image..." value="<%= @photo.image %>">
+  <% if @photo.owner_id == @current_user.id %>
+    <dt>Edit photo</dt>
+    <dd>
+      <form action="/update_photo/<%= @photo.id %>" method="post">
+        <label for="browser_image">Image</label>
+        <input id="browser_image" type="text" name="input_image" placeholder="Enter a URL for the image..." value="<%= @photo.image %>">
 
-      <label for="browser_caption">Caption</label>
-      <textarea id="browser_caption" name="input_caption" placeholder="Enter a caption for the photo..."><%= @photo.caption %></textarea>
+        <label for="browser_caption">Caption</label>
+        <textarea id="browser_caption" name="input_caption" placeholder="Enter a caption for the photo..."><%= @photo.caption %></textarea>
 
-      <button>Update photo</button>
-    </form>
-  </dd>
+        <button>Update photo</button>
+      </form>
+    </dd>
 
-  <dt>Delete photo</dt>
-  <dd>
-    <a href="/delete_photo/<%= @photo.id %>;">
-      Delete this photo
-    </a>
-  </dd>
+    <dt>Delete photo</dt>
+    <dd>
+      <a href="/delete_photo/<%= @photo.id %>;">
+        Delete this photo
+      </a>
+    </dd>
+  <% end %>
 </dl>
 
 <h2>Comments</h2>
@@ -85,11 +94,7 @@
 <h3>Add a new comment</h3>
 
 <form action="/insert_comment_record" method="post">
-  <label for="browser_photo_id">Photo ID</label>
-  <input id="browser_photo_id" type="text" value="<%= @photo.id %>" name="input_photo_id">
-
-  <label for="browser_author_id">Author ID</label>
-  <input id="browser_author_id" type="text" name="input_author_id">
+  <input type="hidden" value="<%= @photo.id %>" name="input_photo_id">
 
   <label for="browser_comment">Comment</label>
   <textarea id="browser_comment" name="input_body" placeholder="Enter a comment..."></textarea>

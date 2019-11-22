@@ -33,35 +33,41 @@
         </a>
       </div>
 
-      <div>
-        <p>User ID: <%= session[:user_id] %></p>
-      </div>
 
-      <div>
-        <a href="/sign_up">
-          <i class="fas fa-users"></i>
+      <% if @current_user == nil %>
+        <div>
+          <a href="/sign_up">
+            <i class="fas fa-users"></i>
 
-          Sign up
-        </a>
-      </div>
+            Sign up
+          </a>
+        </div>
 
-      <div>
-        <a href="/sign_in">
-          <i class="fas fa-users"></i>
+        <div>
+          <a href="/sign_in">
+            <i class="fas fa-users"></i>
 
-          Sign in
-        </a>
-      </div>
+            Sign in
+          </a>
+        </div>
 
-      <div>
-        <a href="/sign_out">
-          <i class="fas fa-users"></i>
+      <% else %>
+        <div>
+          <a href="/users/<%= @current_user.username %>">
+            <%= @current_user.username %>
+          </a>
+        </div>
 
-          Sign out
-        </a>
-      </div>      
+        <div>
+          <a href="/sign_out">
+            <i class="fas fa-users"></i>
+
+            Sign out
+          </a>
+        </div>      
+      <% end %>
     </nav>
-
+    
     <% if alert.present? %>
       <p style="border: thin red solid;"><%= alert %></p>
     <% end %>

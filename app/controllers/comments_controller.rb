@@ -15,7 +15,7 @@ class CommentsController < ApplicationController
   def create
     comment = Comment.new
 
-    comment.author_id = params.fetch(:input_author_id, nil)
+    comment.author_id = @current_user.id
     comment.photo_id = params.fetch(:input_photo_id, nil)
     comment.body = params.fetch(:input_body, nil)
 
